@@ -24,23 +24,23 @@ data class Order(
   val isDelivered: Boolean,
 )
 
-// TODO: Return a list of Product, sorted in the ascending by price. if prices are equal, sorted by favoriteCount descending
-fun List<Product>.sortedByPriceAscendingThenByFavoriteCountDescending(): List<Product> = TODO()
+//Return a list of Product, sorted in the ascending by price. if prices are equal, sorted by favoriteCount descending
+fun List<Product>.sortedByPriceAscendingThenByFavoriteCountDescending(): List<Product> = productList.sortedBy { it.price }.sortedByDescending { it.favoriteCount }
 
-// TODO: Return a set of Products in the orders (The order doesn't matter).
-fun List<Order>.getProductsSet(): Set<Product> = TODO()
+// Return a set of Products in the orders (The order doesn't matter).
+fun List<Order>.getProductsSet(): Set<Product> = orderList.flatMap { it.products }.toSet()
 
-// TODO: Return a list of Products in the orders, duplicates are allowed.
-fun List<Order>.getProductsList(): List<Product> = TODO()
+//Return a list of Products in the orders, duplicates are allowed.
+fun List<Order>.getProductsList(): List<Product> = orderList.flatMap { it.products }
 
-// TODO: Return a list of delivered orders
-fun List<Order>.getDeliveredOrders(): List<Order> = TODO()
+// Return a list of delivered orders
+fun List<Order>.getDeliveredOrders(): List<Order> = orderList.filter { it.isDelivered }
 
-// TODO: Return a list of products in the delivered orders
-fun List<Order>.getDeliveredProductsList(): List<Product> = TODO()
+//Return a list of products in the delivered orders
+fun List<Order>.getDeliveredProductsList(): List<Product> = getDeliveredOrders().flatMap { it.products }
 
-// TODO: Partition the orders into two lists: "delivered" and "not delivered"
-fun List<Order>.partitionDeliveredAndNotDelivered(): Pair<List<Order>, List<Order>> = TODO()
+//Partition the orders into two lists: "delivered" and "not delivered"
+fun List<Order>.partitionDeliveredAndNotDelivered(): Pair<List<Order>, List<Order>> = orderList.partition { it.isDelivered }
 
 // TODO: Return a map of product to count of this product in the orders
 // eg. [Product1 -> 2, Product2 -> 1, Product3 -> 3]
@@ -156,48 +156,48 @@ val orderList = listOf(
 
 fun main() {
   //region sortedByPriceAscendingThenByFavoriteCountDescending
-  println("sortedByPriceAscendingThenByFavoriteCountDescending")
-  println(productList.sortedByPriceAscendingThenByFavoriteCountDescending())
+//  println("sortedByPriceAscendingThenByFavoriteCountDescending")
+//  println(productList.sortedByPriceAscendingThenByFavoriteCountDescending())
   //endregion
 
-  //region getProductsSet
-  println("getProductsSet")
-  println(orderList.getProductsSet())
-  //endregion
-
-  //region getProductsList
-  println("getProductsList")
-  println(orderList.getProductsList())
-  //endregion
-
-  //region getDeliveredOrders
-  println("getDeliveredOrders")
-  println(orderList.getDeliveredOrders())
-  //endregion getDeliveredProductsList
-
-  //region getDeliveredProductsList
-  println("getDeliveredProductsList")
+//  //region getProductsSet
+//  println("getProductsSet")
+//  println(orderList.getProductsSet())
+//  //endregion
+//
+//  //region getProductsList
+//  println("getProductsList")
+//  println(orderList.getProductsList())
+//  //endregion
+//
+//  //region getDeliveredOrders
+//  println("getDeliveredOrders")
+//  println(orderList.getDeliveredOrders())
+//  //endregion getDeliveredProductsList
+//
+//  //region getDeliveredProductsList
+//  println("getDeliveredProductsList")
   println(orderList.getDeliveredProductsList())
-  //endregion
-
-  //region partitionDeliveredAndNotDelivered
-  println("partitionDeliveredAndNotDelivered")
-  println(orderList.partitionDeliveredAndNotDelivered())
-  //endregion
-
-  //region countOfEachProduct
-  println("countOfEachProduct")
-  println(orderList.countOfEachProduct())
-  //endregion
-
-  //region sumProductPrice
-  println("sumProductPrice")
-  println(orderList[0].sumProductPrice())
-  //endregion
-
-  //region getMaxPriceProduct, getMinPriceProduct
-  println("getMaxPriceProduct, getMinPriceProduct")
-  println(orderList[0].getMaxPriceProduct())
-  println(orderList[0].getMinPriceProduct())
+//  //endregion
+//
+//  //region partitionDeliveredAndNotDelivered
+//  println("partitionDeliveredAndNotDelivered")
+//  println(orderList.partitionDeliveredAndNotDelivered())
+//  //endregion
+//
+//  //region countOfEachProduct
+//  println("countOfEachProduct")
+//  println(orderList.countOfEachProduct())
+//  //endregion
+//
+//  //region sumProductPrice
+//  println("sumProductPrice")
+//  println(orderList[0].sumProductPrice())
+//  //endregion
+//
+//  //region getMaxPriceProduct, getMinPriceProduct
+//  println("getMaxPriceProduct, getMinPriceProduct")
+//  println(orderList[0].getMaxPriceProduct())
+//  println(orderList[0].getMinPriceProduct())
   //endregion
 }
