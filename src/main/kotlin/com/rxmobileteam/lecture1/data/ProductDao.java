@@ -14,7 +14,7 @@ import java.util.Set;
  * todo: 1. Implement a method {@link ProductDao#add(Product)} that store new product into the set
  * todo: 2. Implement a method {@link ProductDao#findAll()} that returns a set of all products
  */
-public class ProductDao {
+public class ProductDao implements IProductDao {
     private final Set<Product> products = new HashSet<>();
 
     /**
@@ -23,9 +23,10 @@ public class ProductDao {
      * @param product a product to store
      * @return {@code true} if a product was stored, {@code false} otherwise
      */
+    @Override
     public boolean add(@NotNull Product product) {
-        // TODO: implement this method
-        throw new ExerciseNotCompletedException();
+        return products.add(product);
+        //throw new ExerciseNotCompletedException();
     }
 
     /**
@@ -33,9 +34,10 @@ public class ProductDao {
      *
      * @return a set of all stored products
      */
+    @Override
     public Set<Product> findAll() {
-        // TODO: implement this method
-        throw new ExerciseNotCompletedException();
+        return products;
+        //throw new ExerciseNotCompletedException();
     }
 
 }

@@ -1,10 +1,12 @@
 package com.rxmobileteam.lecture1.service;
 
+import com.rxmobileteam.lecture1.data.IProductDao;
 import com.rxmobileteam.lecture1.data.ProductDao;
 import com.rxmobileteam.utils.ExerciseNotCompletedException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * {@link ProductService} provides an API that allows to manage {@link Product}s.
@@ -13,7 +15,11 @@ import java.util.List;
  * TODO: 2. Using {@link ProductDao} implement method {@link ProductService#searchProducts(String)}
  */
 public class ProductService {
+    private IProductDao productDao;
 
+    public ProductService(IProductDao dao) {
+        productDao = dao;
+    }
     /**
      * Adds a new product to the system.
      *
@@ -21,8 +27,8 @@ public class ProductService {
      * @return {@code true} if a product was added, {@code false} otherwise.
      */
     public boolean addProduct(@NotNull Product product) {
-        // TODO: implement this method
-        throw new ExerciseNotCompletedException();
+        return productDao.add(product);
+        //throw new ExerciseNotCompletedException();
     }
 
     /**
@@ -32,7 +38,9 @@ public class ProductService {
      * @return a list of found products
      */
     public List<Product> searchProducts(String query) {
-        // TODO: implement this method
-        throw new ExerciseNotCompletedException();
+        return productDao.findAll()
+            .stream()
+            .filter(product -> product.getName().contains(query) || product.getDescription().contains(query))
+            .collect(Collectors.toList());
     }
 }
