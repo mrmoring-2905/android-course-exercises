@@ -44,16 +44,16 @@ fun List<Order>.partitionDeliveredAndNotDelivered(): Pair<List<Order>, List<Orde
 
 // TODO: Return a map of product to count of this product in the orders
 // eg. [Product1 -> 2, Product2 -> 1, Product3 -> 3]
-fun List<Order>.countOfEachProduct(): Map<Product, Int> = TODO()
+//fun List<Order>.countOfEachProduct(): Map<Product, Int> = getProductsList().associate {  }
 
-// TODO: Return the sum of product prices in the order
-fun Order.sumProductPrice(): Double = TODO()
+//Return the sum of product prices in the order
+fun Order.sumProductPrice(): Double = products.sumOf { it.price }
 
-// TODO: Return the product with the maximum price in the order
-fun Order.getMaxPriceProduct(): Product = TODO()
+//Return the product with the maximum price in the order
+fun Order.getMaxPriceProduct(): Product = products.maxBy { it.price }
 
-// TODO: Return the product with the min price in the order
-fun Order.getMinPriceProduct(): Product = TODO()
+//Return the product with the min price in the order
+fun Order.getMinPriceProduct(): Product = products.minBy { it.price }
 
 val product = Product(
   id = UUID.randomUUID().toString(),
@@ -166,8 +166,8 @@ fun main() {
 //  //endregion
 //
 //  //region getProductsList
-//  println("getProductsList")
-//  println(orderList.getProductsList())
+  println("getProductsList")
+  println(orderList.getProductsList())
 //  //endregion
 //
 //  //region getDeliveredOrders
@@ -177,7 +177,7 @@ fun main() {
 //
 //  //region getDeliveredProductsList
 //  println("getDeliveredProductsList")
-  println(orderList.getDeliveredProductsList())
+ // println(orderList.getDeliveredProductsList())
 //  //endregion
 //
 //  //region partitionDeliveredAndNotDelivered
