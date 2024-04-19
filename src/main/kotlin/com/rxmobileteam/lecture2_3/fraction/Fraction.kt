@@ -14,10 +14,10 @@ class Fraction private constructor(
 
   //region unary operators
   //"+fraction" operator
-  operator fun unaryPlus(): Fraction = Fraction(1 * numerator, denominator)
+  operator fun unaryPlus(): Fraction = of(1 * numerator, denominator)
 
   //"-fraction" operator
-  operator fun unaryMinus(): Fraction = Fraction(-1 * numerator, denominator)
+  operator fun unaryMinus(): Fraction = of(-1 * numerator, denominator)
   //endregion
 
   //region plus operators
@@ -25,19 +25,19 @@ class Fraction private constructor(
   operator fun plus(other: Fraction): Fraction {
     val newNumerator = numerator * other.denominator + other.numerator * denominator
     val newDenominator = denominator * other.denominator
-    return Fraction(newNumerator, newDenominator)
+    return of(newNumerator, newDenominator)
   }
 
   //"fraction+number" operator
-  operator fun plus(other: Int): Fraction = this + Fraction(other, 1)
+  operator fun plus(other: Int): Fraction = this + ofInt(other)
   //endregion
 
   //region times operators
   //"fraction*fraction" operator
-  operator fun times(other: Fraction): Fraction = Fraction(numerator * other.numerator, denominator * other.denominator)
+  operator fun times(other: Fraction): Fraction = of(numerator * other.numerator, denominator * other.denominator)
 
   //"fraction*number" operator
-  operator fun times(number: Int): Fraction = this * Fraction(number, 1)
+  operator fun times(number: Int): Fraction = this * ofInt(number)
   //endregion
 
   //Compare two fractions
@@ -52,7 +52,10 @@ class Fraction private constructor(
 
   //region toString, hashCode, equals, copy
   //Format the fraction as a string (e.g. "1/2")
-  override fun toString(): String = "$numerator/$denominator"
+  override fun toString(): String {
+    val fraction = of(numerator, denominator)
+    return "${fraction.numerator}/${fraction.denominator}"
+  }
 
   // Implement hashCode
   override fun hashCode(): Int {
@@ -79,7 +82,7 @@ class Fraction private constructor(
   fun copy(
     numerator: Int = this.numerator,
     denominator: Int = this.denominator
-  ): Fraction = Fraction(numerator, denominator)
+  ): Fraction = of(numerator, denominator)
 
   //endregion
 

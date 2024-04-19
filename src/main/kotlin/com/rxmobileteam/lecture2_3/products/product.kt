@@ -25,26 +25,31 @@ data class Order(
 )
 
 //Return a list of Product, sorted in the ascending by price. if prices are equal, sorted by favoriteCount descending
-fun List<Product>.sortedByPriceAscendingThenByFavoriteCountDescending(): List<Product> = productList.sortedBy { it.price }.sortedByDescending { it.favoriteCount }
+fun List<Product>.sortedByPriceAscendingThenByFavoriteCountDescending(): List<Product> = sortedWith(
+  compareBy<Product>{it.price}
+    .thenByDescending { it.favoriteCount }
+)
 
 // Return a set of Products in the orders (The order doesn't matter).
-fun List<Order>.getProductsSet(): Set<Product> = orderList.flatMap { it.products }.toSet()
+fun List<Order>.getProductsSet(): Set<Product> = flatMap { it.products }.toSet()
 
 //Return a list of Products in the orders, duplicates are allowed.
-fun List<Order>.getProductsList(): List<Product> = orderList.flatMap { it.products }
+fun List<Order>.getProductsList(): List<Product> = flatMap { it.products }
 
 // Return a list of delivered orders
-fun List<Order>.getDeliveredOrders(): List<Order> = orderList.filter { it.isDelivered }
+fun List<Order>.getDeliveredOrders(): List<Order> = filter { it.isDelivered }
 
 //Return a list of products in the delivered orders
 fun List<Order>.getDeliveredProductsList(): List<Product> = getDeliveredOrders().flatMap { it.products }
 
 //Partition the orders into two lists: "delivered" and "not delivered"
-fun List<Order>.partitionDeliveredAndNotDelivered(): Pair<List<Order>, List<Order>> = orderList.partition { it.isDelivered }
+fun List<Order>.partitionDeliveredAndNotDelivered(): Pair<List<Order>, List<Order>> = partition { it.isDelivered }
 
-// TODO: Return a map of product to count of this product in the orders
 // eg. [Product1 -> 2, Product2 -> 1, Product3 -> 3]
-//fun List<Order>.countOfEachProduct(): Map<Product, Int> = getProductsList().associate {  }
+fun List<Order>.countOfEachProduct(): Map<Product, Int> =
+  flatMap { it.products }
+  .groupingBy { it }
+  .eachCount()
 
 //Return the sum of product prices in the order
 fun Order.sumProductPrice(): Double = products.sumOf { it.price }
@@ -156,8 +161,8 @@ val orderList = listOf(
 
 fun main() {
   //region sortedByPriceAscendingThenByFavoriteCountDescending
-//  println("sortedByPriceAscendingThenByFavoriteCountDescending")
-//  println(productList.sortedByPriceAscendingThenByFavoriteCountDescending())
+  println("sortedByPriceAscendingThenByFavoriteCountDescending")
+  println(productList.sortedByPriceAscendingThenByFavoriteCountDescending())
   //endregion
 
 //  //region getProductsSet
