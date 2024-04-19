@@ -1,10 +1,7 @@
 package com.rxmobileteam.lecture6
 
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import java.util.*
+import kotlinx.coroutines.*
 
 @JvmInline
 value class UserId(val id: Int)
@@ -75,24 +72,42 @@ internal class RealUserRepository(
   private val userApi: UserApi,
   private val ioDispatcher: CoroutineDispatcher,
 ) : UserRepository {
+
   override suspend fun findUserById(id: UserId): User? {
     // Call userApi's methods on ioDispatcher
-    TODO("Not yet implemented")
+    return withContext(ioDispatcher) {
+      userApi.findUserById(id)
+    }
   }
 
   override suspend fun getPostsByUserId(id: UserId): List<Post> {
     // Call userApi's methods on ioDispatcher
-    TODO("Not yet implemented")
+    val user = findUserById(id)
+    val result = user?.let {
+      withContext(ioDispatcher) {
+        userApi.getPostsByUser(it)
+      }
+    } ?: emptyList()
+    return result
   }
 
   override suspend fun findUserAndPostsById(id: UserId): UserAndPosts? {
     // Call userApi's methods on ioDispatcher
-    TODO("Not yet implemented")
+    val user = findUserById(id)
+    return user?.let {
+      val postList = getPostsByUserId(id)
+      UserAndPosts(it, postList)
+    }
   }
 
   override suspend fun findUserAndUserDetailsById(id: UserId): UserAndDetails? {
     // Call concurrently userApi's methods on ioDispatcher
-    TODO("Not yet implemented")
+    val user = findUserById(id) ?: return null
+    val details = withContext(ioDispatcher) {
+        userApi.findDetailsByUser(id)
+      } ?: return null
+
+    return UserAndDetails(user, details)
   }
 }
 
@@ -127,8 +142,8 @@ fun provideUserRepository(): UserRepository =
       }
 
       override suspend fun findUserById(id: UserId): User? = users
-        .find { it.id == id }
-        .also { delay(500) }
+          .find { it.id == id }
+          .also { delay(500) }
 
       override suspend fun findDetailsByUser(id: UserId): UserDetails? =
         userDetails
@@ -148,23 +163,31 @@ fun provideUserRepository(): UserRepository =
 fun main() = runBlocking {
   val userRepository = provideUserRepository()
 
-  println("findUserById")
-  userRepository.findUserById(UserId(1))
-  userRepository.findUserById(UserId(100))
-  println("-".repeat(80))
+//  println("findUserById")
+//  val result1 = userRepository.findUserById(UserId(1))
+//  val result2 = userRepository.findUserById(UserId(100))
+//  println("result1 - $result1")
+//  println("result2 - $result2")
+//  println("-".repeat(80))
 
-  println("getPostsByUserId")
-  userRepository.getPostsByUserId(UserId(1))
-  userRepository.getPostsByUserId(UserId(100))
-  println("-".repeat(80))
-
-  println("findUserAndPostsById")
-  userRepository.findUserAndPostsById(UserId(1))
-  userRepository.findUserAndPostsById(UserId(100))
-  println("-".repeat(80))
-
+//  println("getPostsByUserId")
+//  val result1 = userRepository.getPostsByUserId(UserId(1))
+//  val result2 = userRepository.getPostsByUserId(UserId(100))
+//  println("result1 - $result1")
+//  println("result2 - $result2")
+//  println("-".repeat(80))
+//
+//  println("findUserAndPostsById")
+//  val result1 = userRepository.findUserAndPostsById(UserId(1))
+//  val result2 = userRepository.findUserAndPostsById(UserId(100))
+//  println("result1 - $result1")
+//  println("result2 - $result2")
+//  println("-".repeat(80))
+//
   println("findUserAndUserDetailsById")
-  userRepository.findUserAndUserDetailsById(UserId(1))
-  userRepository.findUserAndUserDetailsById(UserId(100))
+  val result1 = userRepository.findUserAndUserDetailsById(UserId(1))
+  val result2 = userRepository.findUserAndUserDetailsById(UserId(100))
+  println("result1 - $result1")
+  println("result2 - $result2")
   println("-".repeat(80))
 }

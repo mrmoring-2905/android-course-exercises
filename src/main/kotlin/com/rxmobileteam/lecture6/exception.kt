@@ -37,7 +37,13 @@ class DemoModel(
     // Note: You must preserve the cancellation semantics of the coroutine
 
     scope.launch {
-      maybeFailedFunction()
+      try {
+        val result = maybeFailedFunction()
+        logger.log("result: $result")
+      } catch (e: RuntimeException) {
+        logger.logError(e, "runtime exception")
+      }
+
     }
   }
 
@@ -51,9 +57,11 @@ class DemoModel(
 
 fun main() = runBlocking {
   val model = DemoModel()
+  repeat(10) {
+    model.doSomething()
+    delay(100)
+  }
 
-  model.doSomething()
-  delay(100)
   model.cancelAndJoinBlocking()
 
   delay(5_000)
